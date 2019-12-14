@@ -1,6 +1,6 @@
 apps:
     - script: "index.js"
-      name: "Marudhar-Cup-API --port 3000"
+      name: "Jypl-API --port 3000"
       watch: false
       exec_mode: "cluster"
       env:
