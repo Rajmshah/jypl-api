@@ -52,10 +52,12 @@ export default {
                             if (_.isEmpty(player)) {
                                 data.incrementalId = 750
                                 data.playerId = "JYF" + 750
+                                data.invoiceId = 1
                                 callback(null, player)
                             } else {
                                 data.incrementalId = player.incrementalId + 1
                                 data.playerId = "JYF" + data.incrementalId
+                                data.invoiceId = player.invoiceId + 1
                                 callback(null, player)
                             }
                         })
