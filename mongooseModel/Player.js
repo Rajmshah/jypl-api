@@ -1,8 +1,20 @@
 var schema = new Schema(
     {
-        firstName: { type: String },
-        middleName: { type: String },
-        surname: { type: String },
+        playerId: {
+            type: String
+        },
+        registrationDate: {
+            type: Date
+        },
+        firstName: {
+            type: String
+        },
+        middleName: {
+            type: String
+        },
+        surname: {
+            type: String
+        },
         fullName: {
             type: String
         },
@@ -12,8 +24,31 @@ var schema = new Schema(
         mobile: {
             type: Number
         },
+        address: {
+            type: String
+        },
+        dob: {
+            type: Date
+        },
         age: {
             type: Number
+        },
+        company: {
+            name: {
+                type: String
+            },
+            businessType: {
+                type: String
+            },
+            designation: {
+                type: String
+            },
+            relationship: {
+                type: String
+            },
+            address: {
+                type: String
+            }
         },
         keyRole: {
             type: String,
@@ -28,21 +63,62 @@ var schema = new Schema(
             enum: [
                 "Right Arm Medium Pace",
                 "Left Arm Medium Pace",
-                "Left Arm Spinner",
-                "Off Spinner",
-                "Leg Spinner",
+                "Left Arm Spin",
+                "Right Arm Off Spin",
+                "Right Arm Leg Spin",
                 "None"
             ]
         },
         isWicketkeeper: {
             type: Boolean
         },
+        hasPlayed: {
+            type: Boolean
+        },
+        team: {
+            type: String
+        },
+        shirtSize: {
+            type: String
+        },
+        trouserSize: {
+            type: String
+        },
+        trackLength: {
+            type: String
+        },
+        jerseyName: {
+            type: String
+        },
+        beOwner: {
+            type: Boolean
+        },
+        beSponsor: {
+            type: Boolean
+        },
         photograph: {
             type: String
         },
-        team: {
-            type: Schema.Types.ObjectId,
-            ref: "Team"
+        businessCard: {
+            type: String
+        },
+        idProof: {
+            type: String
+        },
+        invoiceId: {
+            type: String
+        },
+        paymentStatus: {
+            type: String
+        },
+        paymentMethod: {
+            type: String
+        },
+        transactionId: {
+            type: String
+        },
+        isEmailTriggered: {
+            type: Boolean
         }
     },
     {

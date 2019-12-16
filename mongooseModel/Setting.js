@@ -1,6 +1,6 @@
 var schema = new Schema(
     {
-        playerCount: { type: Number }
+        message: { type: String }
     },
     {
         timestamps: true

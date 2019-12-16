@@ -17,8 +17,7 @@
         "mongo-cursor-pagination": "^7.1.0",
         "populate": "^5.0.1",
         "uuidv4": "^5.0.0",
-        "wohlig-framework-core": "latest",
-        "node-xlsx": "latest"
+        "wohlig-framework-core": "latest"
     },
     "devDependencies": {
         "@babel/core": "^7.1.2",
