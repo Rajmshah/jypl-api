@@ -1,5 +1,8 @@
 var schema = new Schema(
     {
+        incrementalId: {
+            type: Number
+        },
         playerId: {
             type: String
         },

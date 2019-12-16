@@ -42,15 +42,42 @@ export default {
         }).exec(callback)
     },
     createPlayer(data, callback) {
-        if (data.middleName) {
-            data.fullName =
-                data.firstName + " " + data.middleName + " " + data.surname
-        } else {
-            data.fullName = data.firstName + " " + data.surname
-        }
+        async.waterfall(
+            [
+                function(callback) {
+                    Player.findOne()
+                        .sort({ incrementalId: -1 })
+                        .exec(function(err, player) {
+                            if (err) callback(err)
+                            if (_.isEmpty(player)) {
+                                data.incrementalId = 750
+                                data.playerId = "JYF" + 750
+                                callback(null, player)
+                            } else {
+                                data.incrementalId = player.incrementalId + 1
+                                data.playerId = "JYF" + data.incrementalId
+                                callback(null, player)
+                            }
+                        })
+                },
+                function(playerId, callback) {
+                    if (data.middleName) {
+                        data.fullName =
+                            data.firstName +
+                            " " +
+                            data.middleName +
+                            " " +
+                            data.surname
+                    } else {
+                        data.fullName = data.firstName + " " + data.surname
+                    }
 
-        const player = new Player(data)
-        player.save(callback)
+                    const player = new Player(data)
+                    player.save(callback)
+                }
+            ],
+            callback
+        )
     },
     delete(data, callback) {
         var obj = {
