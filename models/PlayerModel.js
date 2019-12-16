@@ -7,9 +7,34 @@ export default {
      * @returns {number} that number, plus one.
      */
     search(data, callback) {
-        Player.find({
-            team: data.team
-        }).exec(callback)
+        var skipVal = 0
+        var pageLimit = 10
+        if (data.page) {
+            skipVal = (data.page - 1) * pageLimit
+        }
+        var filter = {}
+        if (data.name) {
+            filter = {
+                firstName: {
+                    $regex: data.name,
+                    $options: "i"
+                }
+            }
+        }
+        async.parallel(
+            {
+                result: function(callback) {
+                    Player.find(filter)
+                        .skip(skipVal)
+                        .limit(pageLimit)
+                        .exec(callback)
+                },
+                count: function(callback) {
+                    Player.countDocuments(filter).exec(callback)
+                }
+            },
+            callback
+        )
     },
     getOne(data, callback) {
         Player.findOne({
