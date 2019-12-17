@@ -55,7 +55,7 @@ var schema = new Schema(
         },
         keyRole: {
             type: String,
-            enum: ["Batsman", "Bowler", "All rounder"]
+            enum: ["Batsman", "Bowler", "All Rounder"]
         },
         battingType: {
             type: String,
