@@ -29,9 +29,9 @@ router.put("/updatePlayerList/:id", (req, res) => {
 router.delete("/deletePlayerList/:id", (req, res) => {
     PlayerListModel.delete(req.params, res.callback)
 })
-router.post("/generateExcel", (req, res) => {
-    PlayerListModel.generateExcel(req.body, res)
-})
+// router.post("/generateExcel", (req, res) => {
+//     PlayerListModel.generateExcel(req.body, res)
+// })
 router.post("/uploadExcel", (req, res) => {
     PlayerListModel.uploadExcel(req.body, res.callback)
 })

@@ -7,9 +7,44 @@ export default {
      * @returns {number} that number, plus one.
      */
     search(data, callback) {
-        PlayerList.find({
-            team: data.team
-        }).exec(callback)
+        var skipVal = 0
+        var pageLimit = 10
+        if (data.page) {
+            skipVal = (data.page - 1) * pageLimit
+        }
+        var filter = {}
+        if (data.name) {
+            filter = {
+                $or: [
+                    {
+                        fullName: {
+                            $regex: data.name,
+                            $options: "i"
+                        }
+                    },
+                    {
+                        team: {
+                            $regex: data.name,
+                            $options: "i"
+                        }
+                    }
+                ]
+            }
+        }
+        async.parallel(
+            {
+                result: function(callback) {
+                    PlayerList.find(filter)
+                        .skip(skipVal)
+                        .limit(pageLimit)
+                        .exec(callback)
+                },
+                count: function(callback) {
+                    PlayerList.countDocuments(filter).exec(callback)
+                }
+            },
+            callback
+        )
     },
     getOne(data, callback) {
         PlayerList.findOne({
@@ -45,47 +80,192 @@ export default {
         }
         PlayerList.updateOne({ _id: param.id }, { $set: data2 }).exec(callback)
     },
-    generateExcel: (data, res) => {
-        PlayerList.find()
-            .populate("team")
-            .lean()
-            .exec(function(err, playerDetail) {
-                if (err) res.callback(err)
-                if (_.isEmpty(playerDetail)) res.callback(null, [])
-                var excelData = []
-                async.each(
-                    playerDetail,
-                    function(player, callback) {
-                        // var obj = {}
-                        // obj["TEAM NAME"] = player.team.name
-                        // obj["VILLAGE"] = player.team.village
-                        // obj["PLAYER NAME"] = player.fullName
-                        // obj.AGE = player.age
-                        // obj.ROLE = player.keyRole
-                        // obj["BATTING TYPE"] = player.battingType
-                        // obj["BOWLING TYPE"] = player.bowlingType
-                        // if (player.isWicketkeeper) {
-                        //     obj["WICKETKEEPER"] = "Yes"
-                        // } else {
-                        //     obj["WICKETKEEPER"] = "No"
-                        // }
-                        // obj.EMAIL = player.email
-                        // obj.MOBILE = player.mobile
-                        // if (player.photograph) {
-                        //     obj.PHOTOGRAPH = "Yes"
-                        // } else {
-                        //     obj.PHOTOGRAPH = "No"
-                        // }
-                        excelData.push(obj)
-                        callback()
-                    },
-                    function(err) {
-                        if (err) res.callback(err)
-                        SettingModel.generateExcel("Team", excelData, res)
-                    }
-                )
-            })
-    },
+    // generateExcel: (data, res) => {
+    //     PlayerList.find()
+    //         .populate("team")
+    //         .lean()
+    //         .exec(function(err, playerDetail) {
+    //             if (err) res.callback(err)
+    //             if (_.isEmpty(playerDetail)) res.callback(null, [])
+    //             var excelData = []
+    //             async.each(
+    //                 playerDetail,
+    //                 function(player, callback) {
+    //                      var obj = {
+    //     company: {}
+    // }
+    // if (player.registrationDate) {
+    //     obj["Registration Date"] = moment(
+    //         player.registrationDate,
+    //         "DD-MM-YYYY"
+    //     )
+    //     // .add(1, "days")
+    // } else {
+    //     obj["Registration Date"] = ""
+    // }
+
+    // if (player.playerId) {
+    //     obj["Sr. No."] = player.playerId
+    // } else {
+    //     obj["Sr. No."] = ""
+    // }
+
+    // if (player.firstName) {
+    //     obj["First Name"] = player.firstName
+    // } else {
+    //     obj["First Name"] = ""
+    // }
+
+    // if (player.middleName) {
+    //     obj["Middle Name"] = player.middleName
+    // } else {
+    //     obj["Middle Name"] = ""
+    // }
+
+    // if (player.surname) {
+    //     obj.Surname = player.surname
+    // } else {
+    //     obj.Surname = ""
+    // }
+
+    // if (player.email) {
+    //     obj.Email = player.email
+    // } else {
+    //     obj.Email = ""
+    // }
+
+    // if (player.mobile) {
+    //     obj.Mobile = player.mobile
+    // } else {
+    //     obj.Mobile = ""
+    // }
+
+    // if (player.address) {
+    //     obj.Address = player.address
+    // } else {
+    //     obj.Address = ""
+    // }
+
+    // if (player.dob) {
+    //     obj.DOB = moment(player.dob, "DD-MM-YYYY")
+    //     // .add(1, "days")
+    // } else {
+    //     obj.DOB = ""
+    // }
+
+    // if (player.company.name) {
+    //     obj["Company Name"] = player.company.name
+    // } else {
+    //     obj["Company Name"] = ""
+    // }
+
+    // if (player.company.businessType) {
+    //     obj["Business Type"] = player.company.businessType
+    // } else {
+    //     obj["Business Type"] = ""
+    // }
+
+    // if (player.company.designation) {
+    //     obj.Designation = player.company.designation
+    // } else {
+    //     obj.Designation = ""
+    // }
+
+    // if (player.company.relationship) {
+    //     obj.Relationship = player.company.relationship
+    // } else {
+    //     obj.Relationship = ""
+    // }
+
+    // if (player.company.address)
+    //     obj["Office Address"] = player.company.address
+    // else obj["Office Address"] = ""
+
+    // if (player.keyRole) obj.Role = player.keyRole
+    // else obj.Role = ""
+
+    // if (player.battingType) obj.Batting = player.battingType
+    // else obj.Batting = ""
+
+    // if (player.bowlingType) obj.Bowling = player.bowlingType
+    // else obj.Bowling = ""
+
+    // if (player.isWicketkeeper == true) {
+    //     obj["Wicket Keeper"] = "Yes"
+    // } else {
+    //     obj["Wicket Keeper"] = "No"
+    // }
+
+    // if (player.team) obj.Team = player.team
+    // else obj.Team = ""
+
+    // if (player.hasPlayed == true) {
+    //     obj.Played = "Yes"
+    // } else {
+    //     obj.Played = "No"
+    // }
+
+    // if (player.jerseyName)
+    //     obj["Jersey Name"] = player.jerseyName
+    // else obj["Jersey Name"] = ""
+
+    // if (player.shirtSize)
+    //     obj["Jersey Size"] = player.shirtSize
+    // else obj["Jersey Size"] = ""
+
+    // if (player.trouserSize)
+    //     obj["Waist Size"] = player.trouserSize
+    // else obj["Waist Size"] = ""
+
+    // if (player.trackLength)
+    //     obj["Track Length"] = player.trackLength
+    // else obj["Track Length"] = ""
+
+    // if (player.beOwner == true) {
+    //     obj.Owner = "Yes"
+    // } else {
+    //     obj.Owner = "No"
+    // }
+
+    // if (player.beSponsor == true) {
+    //     obj.Sponsor = "Yes"
+    // } else {
+    //     obj.Sponsor = "No"
+    // }
+
+    // if (player.paymentMethod) {
+    //     obj["Payment Method"] = player.paymentMethod
+    // } else {
+    //     obj["Payment Method"] = ""
+    // }
+
+    // if (player.paymentStatus) {
+    //     obj["Payment Status"] = player.paymentStatus
+    // } else {
+    //     obj["Payment Status"] = ""
+    // }
+
+    // if (player.invoiceId) {
+    //     obj["Invoice No"] = player.invoiceId
+    // } else {
+    //     obj["Invoice No"] = ""
+    // }
+
+    // if (player.transactionId) {
+    //     obj["Transaction Id"] = player.transactionId
+    // } else {
+    //     obj["Transaction Id"] = ""
+    // }
+    //                     excelData.push(obj)
+    //                     callback()
+    //                 },
+    //                 function(err) {
+    //                     if (err) res.callback(err)
+    //                     SettingModel.generateExcel("Team", excelData, res)
+    //                 }
+    //             )
+    //         })
+    // },
     uploadExcel: function(data, callback) {
         async.waterfall(
             [
@@ -124,7 +304,8 @@ export default {
                                                         "Registration Date"
                                                     ],
                                                     "DD-MM-YYYY"
-                                                ).add(1, "days")
+                                                )
+                                            // .add(1, "days")
 
                                             if (singleData["Sr. No."])
                                                 obj.playerId =
@@ -175,7 +356,8 @@ export default {
                                                 obj.dob = moment(
                                                     singleData.DOB,
                                                     "DD-MM-YYYY"
-                                                ).add(1, "days")
+                                                )
+                                                // .add(1, "days")
                                             }
 
                                             if (singleData["Company Name"])
