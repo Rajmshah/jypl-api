@@ -15,10 +15,20 @@ export default {
         var filter = {}
         if (data.name) {
             filter = {
-                firstName: {
-                    $regex: data.name,
-                    $options: "i"
-                }
+                $or: [
+                    {
+                        firstName: {
+                            $regex: data.name,
+                            $options: "i"
+                        }
+                    },
+                    {
+                        playerId: {
+                            $regex: data.name,
+                            $options: "i"
+                        }
+                    }
+                ]
             }
         }
         async.parallel(
@@ -107,26 +117,23 @@ export default {
                 if (err) res.callback(err)
                 if (_.isEmpty(playerDetail)) res.callback(null, [])
                 var excelData = []
-                async.each(
+                var i = 0
+                async.eachSeries(
                     playerDetail,
                     function(player, callback) {
-                        var obj = {
-                            company: {}
-                        }
-                        if (player.registrationDate) {
-                            obj["Registration Date"] = moment(
-                                player.registrationDate,
-                                "DD-MM-YYYY"
-                            )
-                            // .add(1, "days")
+                        var obj = {}
+                        if (player.playerId) {
+                            obj["Player Id"] = player.playerId
                         } else {
-                            obj["Registration Date"] = ""
+                            obj["Player Id"] = ""
                         }
 
-                        if (player.playerId) {
-                            obj["Sr. No."] = player.playerId
+                        if (player.registrationDate) {
+                            obj["Registration Date"] = moment(
+                                player.registrationDate
+                            ).format("DD-MM-YYYY")
                         } else {
-                            obj["Sr. No."] = ""
+                            obj["Registration Date"] = ""
                         }
 
                         if (player.firstName) {
@@ -166,7 +173,7 @@ export default {
                         }
 
                         if (player.dob) {
-                            obj.DOB = moment(player.dob, "DD-MM-YYYY")
+                            obj.DOB = moment(player.dob).format("DD-MM-YYYY")
                             // .add(1, "days")
                         } else {
                             obj.DOB = ""
