@@ -18,6 +18,9 @@ export default {
             }
         })
     },
+    searchTeamList(data, callback) {
+        TeamList.find().exec(callback)
+    },
     getOne(data, callback) {
         TeamList.findOne({
             _id: data.id

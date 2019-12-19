@@ -2,6 +2,9 @@ const router = Router()
 router.get("/", (req, res) => {
     TeamListModel.search(req.query, res.callback)
 })
+router.get("/searchTeamList", (req, res) => {
+    TeamListModel.searchTeamList(req.query, res.callback)
+})
 router.get(
     "/getOne/:id",
     ValidateRequest({
