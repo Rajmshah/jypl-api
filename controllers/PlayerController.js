@@ -32,5 +32,8 @@ router.delete("/deletePlayer/:id", (req, res) => {
 router.post("/generateExcel", (req, res) => {
     PlayerModel.generateExcel(req.body, res)
 })
+router.post("/generateWelcomeMail", (req, res) => {
+    PlayerModel.generateWelcomeMail(req.body, res.callback)
+})
 
 export default router

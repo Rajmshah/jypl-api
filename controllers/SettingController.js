@@ -28,5 +28,17 @@ router.put("/updateSetting/:id", (req, res) => {
 router.delete("/deleteSetting/:id", (req, res) => {
     SettingModel.delete(req.params, res.callback)
 })
+router.post("/emailReader", (req, res) => {
+    var isfile2 = fs.existsSync("./views/" + req.body.filename)
+    console.log("isfile2", isfile2)
+    if (isfile2) {
+        res.render(req.body.filename, req.body)
+    } else {
+        res.json({
+            value: false,
+            message: "Please provide params"
+        })
+    }
+})
 
 export default router

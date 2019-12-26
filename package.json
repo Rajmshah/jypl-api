@@ -12,10 +12,12 @@
     "dependencies": {
         "async": "^3.1.0",
         "fs-extra": "^8.1.0",
+        "html-pdf": "^2.2.0",
         "json2xls": "^0.1.2",
         "moment": "^2.24.0",
         "mongo-cursor-pagination": "^7.1.0",
         "populate": "^5.0.1",
+        "sendgrid": "^5.2.3",
         "uuidv4": "^5.0.0",
         "wohlig-framework-core": "latest"
     },
