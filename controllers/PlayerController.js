@@ -20,6 +20,9 @@ router.get(
         PlayerModel.getOne(req.params, res.callback)
     }
 )
+router.get("/checkPlayerRegisteredOrNot", (req, res) => {
+    PlayerModel.checkPlayerRegisteredOrNot(req.query, res.callback)
+})
 router.post("/savePlayer", (req, res) => {
     PlayerModel.createPlayer(req.body, res.callback)
 })

@@ -51,6 +51,29 @@ export default {
             _id: data.id
         }).exec(callback)
     },
+    checkPlayerRegisteredOrNot(data, callback) {
+        var matchObj
+
+        if (data.dob && data.email) {
+            matchObj = {
+                dob: data.dob,
+                email: data.email,
+                fullName: data.fullName,
+                team: data.team
+            }
+        } else if (data.fullName) {
+            matchObj = {
+                fullName: data.fullName,
+                team: data.team
+            }
+        } else {
+            matchObj = {
+                firstName: data.firstName,
+                team: data.team
+            }
+        }
+        Player.findOne(matchObj).exec(callback)
+    },
     createPlayer(data, callback) {
         if (data.middleName) {
             data.fullName =
@@ -345,9 +368,7 @@ export default {
             if (err) {
                 callback(err)
             } else if (pdfRespo) {
-                var pdfNamePath =
-                    "file:///home/wohlig/Documents/personal/jypl/jypl-api/pdf/" +
-                    pdfRespo.name
+                var pdfNamePath = "http://api.jypl.in/pdf/" + pdfRespo.name
                 var obj = {
                     fileName: pdfObj.newFilename,
                     filePath: pdfNamePath
