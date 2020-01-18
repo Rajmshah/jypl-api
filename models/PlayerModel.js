@@ -369,7 +369,11 @@ export default {
             if (err) {
                 callback(err)
             } else if (pdfRespo) {
-                var pdfNamePath = "http://api.jypl.in/pdf/" + pdfRespo.name
+                // var pdfNamePath =
+                //     "file:///home/wohlig/Documents/personal/jypl/jypl-api/pdf/" +
+                // pdfRespo.name
+                var pdfNamePath =
+                    "http://api.jypl.in/pdf/" + pdfRespo.name + ".pdf"
                 var obj = {
                     fileName: pdfObj.newFilename,
                     filePath: pdfNamePath
