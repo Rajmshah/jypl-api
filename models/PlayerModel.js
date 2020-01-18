@@ -354,7 +354,8 @@ export default {
         var pdfObj = {}
         pdfObj.filename = "./views/invoice.ejs"
         pdfObj.email = data.email
-        pdfObj.newFilename = data.playerId + "-" + data.fullName
+        pdfObj.newFilename =
+            data.playerId + "-" + data.firstName + "_" + data.surname
         pdfObj.invoiceDate = new Date()
         pdfObj.companyName = data.company.name
         pdfObj.fullName = data.fullName
