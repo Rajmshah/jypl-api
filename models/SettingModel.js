@@ -266,7 +266,9 @@ export default {
             } else {
                 var path = "pdf/"
                 var newFilename = pdfObj.newFilename
-                var writestream = fs.createWriteStream(path + newFilename)
+                var writestream = fs.createWriteStream(
+                    path + newFilename + ".pdf"
+                )
 
                 writestream.on("finish", function(err, res) {
                     if (err) {
