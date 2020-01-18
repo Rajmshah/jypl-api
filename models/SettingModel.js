@@ -29,6 +29,7 @@ export default {
         }
         Setting.updateOne({ _id: param.id }, { $set: data2 }).exec(callback)
     },
+
     generateExcel: function(name, found, res) {
         var excelData = []
         _.each(found, function(singleData) {
@@ -75,6 +76,7 @@ export default {
                 if (data.filename && data.filename !== "") {
                     request.post(
                         {
+                            // url: "http://localhost:3000/Setting/emailReader/",
                             url: "http://api.jypl.in/Setting/emailReader/",
                             json: data
                         },
@@ -97,12 +99,14 @@ export default {
                                         "text/html",
                                         body
                                     )
+                                    // var attachments = new helper.Attachment()
                                     var mail = new helper.Mail(
                                         from_email,
                                         subject,
                                         to_email,
                                         content
                                     )
+                                    // attachments
                                     // console.log("api_key", userdata[0].name);
                                     var sg = require("sendgrid")(
                                         userdata[0].key
@@ -242,6 +246,160 @@ export default {
                         message: "No api keys found"
                     },
                     null
+                )
+            }
+        })
+    },
+
+    generatePdf: function(pdfObj, callback) {
+        console.log("generatePdf", pdfObj)
+
+        var pdf = require("html-pdf")
+        var ejs = require("ejs")
+
+        var file = pdfObj.filename
+
+        var i = 0
+        ejs.renderFile(file, pdfObj, {}, function(err, html) {
+            if (err) {
+                callback(err)
+            } else {
+                var path = "pdf/"
+                var newFilename = pdfObj.newFilename
+                var writestream = fs.createWriteStream(path + newFilename)
+
+                writestream.on("finish", function(err, res) {
+                    if (err) {
+                        console.log("Something Fishy", err)
+                    } else {
+                        callback(null, {
+                            name: newFilename,
+                            url: path + newFilename
+                        })
+                    }
+                })
+
+                var options = {
+                    paginationOffset: 5,
+                    phantomPath:
+                        "node_modules/phantomjs-prebuilt/bin/phantomjs",
+                    // Export options
+                    height: "10.5in", // allowed units: mm, cm, in, px
+                    width: "10in",
+                    format: "Letter", // allowed units: A3, A4, A5, Legal, Letter, Tabloid
+                    // "orientation": "portrait", // portrait or landscape
+                    // "zoomFactor": "1", // default is 1
+                    // Page options
+                    border: {
+                        top: "0.5cm", // default is 0, units: mm, cm, in, px
+                        right: "0",
+                        bottom: "0",
+                        left: "0"
+                    },
+                    // File options
+                    type: "pdf", // allowed file types: png, jpeg, pdf
+                    timeout: 30000, // Timeout that will cancel phantomjs, in milliseconds
+                    footer: {
+                        height: "0"
+                    }
+                    // "filename": page.filename + ".pdf"
+                }
+
+                pdf.create(html, options).toStream(function(err, stream) {
+                    if (err) {
+                        callback(err)
+                    } else {
+                        i++
+                        stream.pipe(writestream)
+                    }
+                })
+            }
+        })
+    },
+
+    readAttachment: function(filename, callback) {
+        console.log("filename", filename)
+        var readstream = gfs.createReadStream({
+            filename: filename
+        })
+        readstream.on("error", function(err) {
+            callback(err, false)
+        })
+        var buf
+        var bufs = []
+        readstream.on("data", function(d) {
+            bufs.push(d)
+        })
+        readstream.on("end", function() {
+            buf = Buffer.concat(bufs)
+            callback(null, buf)
+        })
+    },
+
+    sendEmail: function(
+        fromEmail,
+        toEmail,
+        subject,
+        html,
+        attachments,
+        callback
+    ) {
+        Password.find(function(err, data) {
+            if (err) {
+                callback(err)
+            } else {
+                var helper = require("sendgrid").mail
+                var sg = require("sendgrid")(data[0].key)
+                var mail = new helper.Mail()
+
+                var email = new helper.Email(
+                    fromEmail.email,
+                    fromEmailName.name
+                )
+                mail.setFrom(email)
+                mail.setSubject(subject)
+                var personalization = new helper.Personalization()
+                _.each(toEmail, function(n) {
+                    var email = new helper.Email(n.email, n.name)
+                    personalization.addTo(email)
+                })
+
+                mail.addPersonalization(personalization)
+
+                var content = new helper.Content("text/html", html)
+                mail.addContent(content)
+
+                async.each(
+                    attachments,
+                    function(filename, callback) {
+                        var attachment = new helper.Attachment()
+                        Setting.readAttachment(filename, function(err, data) {
+                            if (err) {
+                                callback(err)
+                            } else {
+                                var base64File = new Buffer(data).toString(
+                                    "base64"
+                                )
+                                attachment.setContent(base64File)
+                                attachment.setFilename(filename)
+                                attachment.setDisposition("attachment")
+                                mail.addAttachment(attachment)
+                                callback()
+                            }
+                        })
+                    },
+                    function(err) {
+                        if (err) {
+                            callback(err)
+                        } else {
+                            var request = sg.emptyRequest({
+                                method: "POST",
+                                path: "/v3/mail/send",
+                                body: mail.toJSON()
+                            })
+                            sg.API(request, callback)
+                        }
+                    }
                 )
             }
         })

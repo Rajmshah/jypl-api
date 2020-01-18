@@ -311,17 +311,48 @@ export default {
     },
     generateWelcomeMail: (data, callback) => {
         var emailData = {}
-        emailData.from = "raj.mshah2015@gmail.com"
-        emailData.email = data.email
+        emailData = data
+        emailData.from = "jewelleryyouthforum@gmail.com"
         emailData.filename = "welcome.ejs"
-        emailData.subject = "Welcome Email"
-        console.log("emaildata", emailData)
+        emailData.subject = "JYPL Season 4 Registration Confirmation."
+        // console.log("emaildata", emailData)
 
         SettingModel.email(emailData, function(err, emailRespo) {
             if (err) {
                 callback(err)
             } else if (emailRespo) {
                 callback(null, emailRespo)
+            } else {
+                callback(null, "Invalid data")
+            }
+        })
+    },
+    generateInvoicePdf: (data, callback) => {
+        var pdfObj = {}
+        pdfObj.filename = "./views/invoice.ejs"
+        pdfObj.email = data.email
+        pdfObj.newFilename = data.playerId + "-" + data.fullName
+        pdfObj.invoiceDate = new Date()
+        pdfObj.companyName = data.company.name
+        pdfObj.fullName = data.fullName
+        pdfObj.playerId = data.playerId
+        pdfObj.invoiceId = data.invoiceId
+        pdfObj.address = data.address
+        pdfObj.mobile = data.mobile
+
+        SettingModel.generatePdf(pdfObj, function(err, pdfRespo) {
+            console.log("err", err, "pdfRespo", pdfRespo)
+            if (err) {
+                callback(err)
+            } else if (pdfRespo) {
+                var pdfNamePath =
+                    "file:///home/wohlig/Documents/personal/jypl/jypl-api/pdf/" +
+                    pdfRespo.name
+                var obj = {
+                    fileName: pdfObj.newFilename,
+                    filePath: pdfNamePath
+                }
+                callback(null, obj)
             } else {
                 callback(null, "Invalid data")
             }

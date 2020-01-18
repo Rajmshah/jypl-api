@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="shortcut icon" href="">-->
+
+    <style>
+        .starter-template {
+            padding: 40px 15px;
+            text-align: center;
+        }
+
+        .container {
+            width: 600px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .row {
+            margin: 15px -15px 15px -15px;
+        }
+
+        .row:before,
+        .row:after {
+            content: " ";
+            display: table;
+        }
+
+        .row:after {
+            clear: both;
+        }
+
+        .col-xs-2 {
+            position: relative;
+            min-height: 1px;
+            padding-left: 15px;
+            padding-right: 15px;
+            float: left;
+            width: 16.66667%;
+        }
+
+        .col-xs-4 {
+            position: relative;
+            min-height: 1px;
+            padding-left: 15px;
+            padding-right: 15px;
+            float: left;
+            width: 33.33333%;
+        }
+
+        .col-xs-5 {
+            position: relative;
+            min-height: 1px;
+            padding-left: 15px;
+            padding-right: 15px;
+            float: left;
+            width: 41.66667%;
+        }
+
+        .col-xs-6 {
+            position: relative;
+            min-height: 1px;
+            float: left;
+            width: 49.96669%;
+        }
+
+        .col-xs-8 {
+            position: relative;
+            min-height: 1px;
+            padding-left: 15px;
+            padding-right: 15px;
+            float: right;
+            width: 66.66667%;
+        }
+
+        table {
+            background-color: transparent;
+        }
+
+        th {
+            text-align: left;
+        }
+
+        .table {
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 20px;
+            border-collapse: separate;
+            border: 1px solid rgb(165, 147, 147);
+        }
+
+        .table>thead>tr>th,
+        .table>thead>tr>td,
+        .table>tbody>tr>th,
+        .table>tbody>tr>td {
+            border: 0;
+            padding: 10px;
+            word-break: break-all;
+        }
+
+        .table td {
+            padding: 10px;
+        }
+
+        .uppert td {
+            /* color: #053054;
+                width: 50%;
+                border: 1px solid black;
+                padding: 6px 0 !important;
+                height: 34px;
+                font-size: 15px !important; */
+            color: #053054;
+            width: 50%;
+            border: 0;
+            padding-top: 0!important;
+            padding-bottom: 0!important;
+            padding-left: 0!important;
+            padding-right: 10px!important;
+            height: 30px;
+            font-size: 12px !important;
+        }
+
+        .uppert1 td {
+            color: #053054;
+            width: 50%;
+            border-left: 1px solid transparent;
+            border-top: 1px solid black;
+            border-right: 1px solid black;
+            border-bottom: 1px solid black;
+            padding: 6px 0 !important;
+            height: 34px;
+            font-size: 15px !important;
+        }
+
+        .append td {
+            border-bottom: 1px solid #ddd !important;
+            padding: 3px !important;
+            font-size: 12px !important;
+            text-align: center;
+        }
+
+        .append th {
+            padding: 3px !important;
+            font-size: 12px !important;
+            text-align: center;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row" style="padding:0 15px; margin: 15px -15px 0 -15px;">
+            <div class="">
+                <div class="logo" style="display: inline-block;vertical-align: middle;">
+                    <img width="80px" height="80px" src="https://storage.googleapis.com/jypl/jyf-logo.png" />
+                </div>
+                <div class="" style="display: inline-block;vertical-align: middle;margin: 0 80px;">
+                    <div align="center" style="color: #053054;font-size: 20px;font-variant: small-caps;">
+                        Jewellery Youth Forum (INDIA)
+                        </d>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="text-align:center;padding:0 15px;font-size:14px;margin: 0 -15px 0 -15px;">
+                <p
+                    style="font-size: 10px;font-family: serif; border-top:1px solid; border-bottom:1px solid; padding: 5px 0;line-height: 1.6;">
+                    Reg Address: Office No 304, 28, DD Jewel Building, 1st
+                    Agiyary Lane, Zaveri Bazar, Kalbadevi Mumbai 400 003
+                    India.<br />
+                    Mobile : +91 7304134232 &nbsp;&nbsp;&nbsp;&nbsp; CIN:
+                    U74999MH2018NPL303555
+                </p>
+            </div>
+            <div class="row" style="margin: 0 -15px 10px -15px;">
+                <div>
+                    <div align="center" style="color: #053054;font-size: 16px;font-variant: small-caps;">
+                        INVOICE
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="padding: 0 15px;">
+                <table class="uppert">
+                    <!-- class="table uppert" -->
+                    <tr>
+                        <td style="font-size: 12px;"><strong>
+                                Invoice No:</strong> <%=invoiceId%>
+                        </td>
+                        <td style="font-size: 12px;"><strong>
+                                Reg No:</strong> <%=playerId%>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="font-size: 12px;"><strong>
+                                Date:</strong> <%=invoiceDate%>
+                        </td>
+                        <td style="font-size: 12px;"><strong>
+                                Company Name:</strong> <%=companyName%>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="font-size: 12px;"><strong>
+                                Jewellery Youth Forum (INDIA)</strong>
+                        </td>
+                        <td style="font-size: 12px;"><strong>
+                                Player Name:</strong> <%=fullName%>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="font-size: 12px;"><strong>
+                                Pan:</strong> AAECJ1574B
+                        </td>
+                        <td style="font-size: 12px;"><strong>
+                                Address:</strong> <%=address%>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="font-size: 12px;"><strong>
+                                Email Id:</strong> jewelleryyouthforum@gmail.com
+                        </td>
+                        <td style="font-size: 12px;"><strong>
+                                Email Id:</strong> <%=email%>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="font-size: 12px;"><strong>
+                                HDFC Bank</strong>
+                        </td>
+                        <td style="font-size: 12px;"><strong>
+                                Mobile:</strong> <%=mobile%>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="font-size: 12px;"><strong>
+                                Branch:</strong> Zaveri Bazar, Mumbai
+                        </td>
+                        <td style="font-size: 12px;"><strong></strong></td>
+                    </tr>
+
+                    <tr>
+                        <td style="font-size: 12px;"><strong>
+                                Account no:</strong> 50200029531872
+                        </td>
+                        <td style="font-size: 12px;"><strong></strong></td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 12px;"><strong>
+                                Account Type:</strong> Current
+                        </td>
+                        <td style="font-size: 12px;"><strong></strong></td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 12px;"><strong>
+                                IFSC code:</strong> HDFC0001105
+                        </td>
+                        <td style="font-size: 12px;"><strong></strong></td>
+                    </tr>
+                </table>
+            </div>
+
+            <table class="table append" style="margin:15px 0;border:0;">
+                <thead>
+                    <tr>
+                        <th style="font-size: 12px;padding: 3px; text-align: left;background-color: #ddd;">
+                            Payment Detail
+                        </th>
+
+                        <th style="font-size: 12px;padding: 3px;text-align: right;background-color: #ddd;">
+                            Amount
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-size: 12px;padding: 3px;text-align: left;line-height: 1.8;">
+                            <div>Players enrollment fees for JYPL</div>
+                            <div class="">Invoice No: <%=invoiceId%></div>
+                        </td>
+                        <td style="font-size: 12px;padding: 3px; text-align: right;">
+                            <div>4250.00</div>
+                            <div style="visibility: hidden;">4250.00</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            style="font-size: 12px;padding: 3px; text-align: right; border:0;border-bottom:0 !important;">
+                            <strong> Total </strong>
+                        </td>
+                        <td
+                            style="font-size: 12px;padding: 3px; text-align: right; border:0;border-bottom:0 !important;">
+                            <span>4250.00</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="row text-center" style="padding:0 15px;font-size:11px;">
+                <div style="margin-top:30px;">
+                    This is a computer generated invoice and does not need
+                    signature.
+                </div>
+            </div>
+        </div>
+</body>
+
+</html>

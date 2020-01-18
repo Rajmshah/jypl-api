@@ -35,5 +35,8 @@ router.post("/generateExcel", (req, res) => {
 router.post("/generateWelcomeMail", (req, res) => {
     PlayerModel.generateWelcomeMail(req.body, res.callback)
 })
+router.post("/generateInvoicePdf", (req, res) => {
+    PlayerModel.generateInvoicePdf(req.body, res.callback)
+})
 
 export default router

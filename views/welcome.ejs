@@ -17,12 +17,71 @@
         />
 
         <title>Jypl</title>
+        <style>
+            .text-center {
+                text-align: center;
+            }
+            p {
+                font-size: 14px;
+            }
+            .title {
+                font-size: 15px;
+            }
+            .container {
+                width: 600px;
+                margin: 0 auto;
+            }
+        </style>
     </head>
 
     <body>
         <div class="container">
-            <h1 class="text-center">Jypl</h1>
-            <%=email%>
+            <div class="text-center">
+                <img
+                    src="https://storage.googleapis.com/jypl/jypl-logo.png"
+                    alt="JYPL Logo"
+                    width="175px"
+                />
+            </div>
+            <div class="">
+                <p class="title">
+                    <br />
+                    <br />
+                    Dear <%=fullName%>,
+                    <br />
+                    <br />
+                </p>
+                <p>
+                    Thank you for registering in Jewellers Youth Premier League
+                    Season 4.
+                    <br />
+                    <br />
+                    This is a confirmation email of your registration for JYPL
+                    Season 4.
+                    <br />
+                    <br />
+                    We are glad that you showed interest and want to be part of
+                    JYPL 4, we look forward to having a great season this year.
+                    <br />
+                    <br />
+                    You will be intimated with all the updates here after via
+                    text and email on the registered number and email ID.
+                    <br />
+                    <br />
+                    You will receive the invoice of your payment made towards
+                    the registration shortly.
+                    <br />
+                    <br />
+                    <!-- Please find the attached invoice for your payment.
+                    <br />
+                    <br /> -->
+                </p>
+
+                <p>
+                    Thanks & Regards<br />
+                    Jewellers Youth Forum, India ( JYF )
+                </p>
+            </div>
         </div>
     </body>
 </html>
