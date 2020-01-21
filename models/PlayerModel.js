@@ -172,8 +172,12 @@ export default {
                             obj["Registration Date"] = moment(
                                 player.registrationDate
                             ).format("DD-MM-YYYY")
+                            obj["Registration Time"] = moment(
+                                player.registrationDate
+                            ).format("HH:mm A")
                         } else {
                             obj["Registration Date"] = ""
+                            obj["Registration Time"] = ""
                         }
 
                         if (player.firstName) {
@@ -350,7 +354,55 @@ export default {
             }
         })
     },
+    generateInvoiceMail: (data, callback) => {
+        var emailData = {}
+        emailData = data
+        var fromEmail = {
+            email: "jewelleryyouthforum@gmail.com",
+            name: "Jewellery Youth Forum"
+        }
+        var fileName = "./views/invoice-mail.ejs"
+        var subject = "JYPL Season 4 Registration Invoice."
+        // console.log("emaildata", emailData)
+        PlayerModel.generateInvoicePdf(data, function(err, pdfRespo) {
+            if (err) {
+                callback(err)
+            } else if (pdfRespo) {
+                // console.log(pdfRespo)
+                var pdfPath = pdfRespo.filePath
+                console.log(
+                    "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++",
+                    pdfPath
+                )
+                // var pdfPath =
+                //     "/home/wohlig/Documents/personal/jypl/jypl-api/pdf/JYF_750-Raj_Shah.pdf"
+                var toEmail = [{ email: data.email }]
+                var attachments = []
+                attachments.push(pdfPath)
+                SettingModel.emailAttach(
+                    fromEmail,
+                    toEmail,
+                    subject,
+                    emailData,
+                    fileName,
+                    attachments,
+                    function(err, emailRespo) {
+                        if (err) {
+                            callback(err)
+                        } else if (emailRespo) {
+                            callback(null, emailRespo)
+                        } else {
+                            callback(null, "Invalid data")
+                        }
+                    }
+                )
+            } else {
+                callback(null, "Invalid data")
+            }
+        })
+    },
     generateInvoicePdf: (data, callback) => {
+        console.log("name", data)
         var pdfObj = {}
         pdfObj.filename = "./views/invoice.ejs"
         pdfObj.email = data.email
@@ -371,11 +423,12 @@ export default {
             } else if (pdfRespo) {
                 // var pdfNamePath =
                 //     "file:///home/wohlig/Documents/personal/jypl/jypl-api/pdf/" +
-                // pdfRespo.name
+                //     pdfRespo.name +
+                //     ".pdf"
                 var pdfNamePath =
                     "http://api.jypl.in/pdf/" + pdfRespo.name + ".pdf"
                 var obj = {
-                    fileName: pdfObj.newFilename,
+                    fileName: pdfObj.newFilename + ".pdf",
                     filePath: pdfNamePath
                 }
                 callback(null, obj)

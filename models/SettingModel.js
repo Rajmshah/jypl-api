@@ -320,7 +320,8 @@ export default {
     },
 
     readAttachment: function(filename, callback) {
-        console.log("filename", filename)
+        var Grid = require("gridfs-stream")
+        var gfs = Grid(mongoose.connections[0].db, mongoose.mongo)
         var readstream = gfs.createReadStream({
             filename: filename
         })
@@ -338,71 +339,87 @@ export default {
         })
     },
 
-    sendEmail: function(
+    emailAttach: function(
         fromEmail,
         toEmail,
         subject,
-        html,
+        emailData,
+        fileName,
         attachments,
         callback
     ) {
-        Password.find(function(err, data) {
+        Password.findOne({ name: "sendgrid" }, function(err, data) {
+            console.log(err, data)
             if (err) {
                 callback(err)
             } else {
+                var ejs = require("ejs")
                 var helper = require("sendgrid").mail
-                var sg = require("sendgrid")(data[0].key)
+                var sg = require("sendgrid")(data.key)
                 var mail = new helper.Mail()
 
-                var email = new helper.Email(
-                    fromEmail.email,
-                    fromEmailName.name
-                )
+                var email = new helper.Email(fromEmail.email, fromEmail.name)
+
                 mail.setFrom(email)
                 mail.setSubject(subject)
                 var personalization = new helper.Personalization()
                 _.each(toEmail, function(n) {
-                    var email = new helper.Email(n.email, n.name)
-                    personalization.addTo(email)
+                    if (n.name) {
+                        var email = new helper.Email(n.email, n.name)
+                        personalization.addTo(email)
+                    } else {
+                        var email = new helper.Email(n.email)
+                        personalization.addTo(email)
+                    }
                 })
 
                 mail.addPersonalization(personalization)
 
-                var content = new helper.Content("text/html", html)
-                mail.addContent(content)
-
-                async.each(
-                    attachments,
-                    function(filename, callback) {
-                        var attachment = new helper.Attachment()
-                        Setting.readAttachment(filename, function(err, data) {
-                            if (err) {
-                                callback(err)
-                            } else {
-                                var base64File = new Buffer(data).toString(
-                                    "base64"
-                                )
-                                attachment.setContent(base64File)
-                                attachment.setFilename(filename)
-                                attachment.setDisposition("attachment")
-                                mail.addAttachment(attachment)
-                                callback()
+                ejs.renderFile(fileName, emailData, {}, function(err, body) {
+                    // console.log("err", err, "body", body)
+                    if (err) {
+                        callback(err)
+                    } else {
+                        var content = new helper.Content("text/html", body)
+                        mail.addContent(content)
+                        async.each(
+                            attachments,
+                            function(filename, callback) {
+                                var attachment = new helper.Attachment()
+                                SettingModel.readAttachment(filename, function(
+                                    err,
+                                    data
+                                ) {
+                                    // console.log(err, data)
+                                    if (err) {
+                                        callback(err)
+                                    } else {
+                                        var base64File = new Buffer(
+                                            data
+                                        ).toString("base64")
+                                        attachment.setContent(base64File)
+                                        attachment.setFilename(filename)
+                                        attachment.setDisposition("attachment")
+                                        mail.addAttachment(attachment)
+                                        callback()
+                                    }
+                                })
+                            },
+                            function(err) {
+                                if (err) {
+                                    callback(err)
+                                } else {
+                                    var request = sg.emptyRequest({
+                                        method: "POST",
+                                        path: "/v3/mail/send",
+                                        body: mail.toJSON()
+                                    })
+                                    sg.API(request, callback)
+                                }
                             }
-                        })
-                    },
-                    function(err) {
-                        if (err) {
-                            callback(err)
-                        } else {
-                            var request = sg.emptyRequest({
-                                method: "POST",
-                                path: "/v3/mail/send",
-                                body: mail.toJSON()
-                            })
-                            sg.API(request, callback)
-                        }
+                        )
                     }
-                )
+                })
             }
         })
     }

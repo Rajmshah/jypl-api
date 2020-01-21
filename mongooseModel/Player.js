@@ -109,7 +109,7 @@ var schema = new Schema(
             type: String
         },
         invoiceId: {
-            type: String
+            type: Number
         },
         paymentStatus: {
             type: String
@@ -121,6 +121,9 @@ var schema = new Schema(
             type: String
         },
         isEmailTriggered: {
+            type: Boolean
+        },
+        specialRegistration: {
             type: Boolean
         }
     },
