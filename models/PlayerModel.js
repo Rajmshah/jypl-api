@@ -303,6 +303,12 @@ export default {
                             obj.Sponsor = "No"
                         }
 
+                        if (player.specialRegistration == true) {
+                            obj["Private Link"] = "Yes"
+                        } else {
+                            obj["Private Link"] = "No"
+                        }
+
                         if (player.paymentMethod) {
                             obj["Payment Method"] = player.paymentMethod
                         } else {
