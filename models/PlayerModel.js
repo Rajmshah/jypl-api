@@ -375,16 +375,20 @@ export default {
                 callback(err)
             } else if (pdfRespo) {
                 // console.log(pdfRespo)
-                var pdfPath = pdfRespo.filePath
-                console.log(
-                    "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++",
-                    pdfPath
-                )
+                var obj = {
+                    fileName: pdfRespo.fileName,
+                    filePath: pdfRespo.filePath
+                }
+                // var pdfPath = pdfRespo.filePath
+                // console.log(
+                //     "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++",
+                //     pdfPath
+                // )
                 // var pdfPath =
                 //     "/home/wohlig/Documents/personal/jypl/jypl-api/pdf/JYF_750-Raj_Shah.pdf"
                 var toEmail = [{ email: data.email }]
                 var attachments = []
-                attachments.push(pdfPath)
+                attachments.push(obj)
                 SettingModel.emailAttach(
                     fromEmail,
                     toEmail,
@@ -433,7 +437,12 @@ export default {
                 //     ".pdf"
                 // var pdfNamePath =
                 //     "http://api.jypl.in/pdf/" + pdfRespo.name + ".pdf"
-                var pdfNamePath = pdfRespo.filename
+                if (pdfRespo.name) {
+                    var pdfNamePath =
+                        "/home/projects/jypl-api/" + pdfRespo.url + ".pdf"
+                } else {
+                    var pdfNamePath = pdfRespo.filename
+                }
                 var obj = {
                     fileName: pdfObj.newFilename + ".pdf",
                     filePath: pdfNamePath

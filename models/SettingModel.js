@@ -368,27 +368,31 @@ export default {
                             attachments,
                             function(filename, callback) {
                                 var attachment = new helper.Attachment()
-                                SettingModel.readAttachment(filename, function(
-                                    err,
-                                    data
-                                ) {
-                                    // console.log(err, data)
-                                    if (err) {
-                                        callback(err)
-                                    } else {
-                                        // console.log(filename)
-                                        var base64File = new Buffer(
-                                            data
-                                        ).toString("base64")
-                                        // console.log(base64File)
-                                        attachment.setContent(base64File)
-                                        attachment.setFilename(filename)
-                                        attachment.setDisposition("attachment")
-                                        // console.log('Hello',attachment)
-                                        mail.addAttachment(attachment)
-                                        callback()
+                                SettingModel.readAttachment(
+                                    filename.filePath,
+                                    function(err, data) {
+                                        // console.log(err, data)
+                                        if (err) {
+                                            callback(err)
+                                        } else {
+                                            // console.log(filename)
+                                            var base64File = new Buffer(
+                                                data
+                                            ).toString("base64")
+                                            // console.log(base64File)
+                                            attachment.setContent(base64File)
+                                            attachment.setFilename(
+                                                filename.fileName
+                                            )
+                                            attachment.setDisposition(
+                                                "attachment"
+                                            )
+                                            // console.log('Hello',attachment)
+                                            mail.addAttachment(attachment)
+                                            callback()
+                                        }
                                     }
-                                })
+                                )
                             },
                             function(err) {
                                 // console.log(err)
