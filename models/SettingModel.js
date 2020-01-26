@@ -266,20 +266,7 @@ export default {
             } else {
                 var path = "pdf/"
                 var newFilename = pdfObj.newFilename
-                var writestream = fs.createWriteStream(
-                    path + newFilename + ".pdf"
-                )
-
-                writestream.on("finish", function(err, res) {
-                    if (err) {
-                        console.log("Something Fishy", err)
-                    } else {
-                        callback(null, {
-                            name: newFilename,
-                            url: path + newFilename
-                        })
-                    }
-                })
+                var fileName = path + newFilename + ".pdf"
 
                 var options = {
                     paginationOffset: 5,
@@ -307,12 +294,11 @@ export default {
                     // "filename": page.filename + ".pdf"
                 }
 
-                pdf.create(html, options).toStream(function(err, stream) {
+                pdf.create(html, options).toFile(fileName, function(err, res) {
                     if (err) {
                         callback(err)
                     } else {
-                        i++
-                        stream.pipe(writestream)
+                        callback(null, res)
                     }
                 })
             }
@@ -320,11 +306,7 @@ export default {
     },
 
     readAttachment: function(filename, callback) {
-        var Grid = require("gridfs-stream")
-        var gfs = Grid(mongoose.connections[0].db, mongoose.mongo)
-        var readstream = gfs.createReadStream({
-            filename: filename
-        })
+        var readstream = fs.createReadStream(filename, { mode: 0o666 })
         readstream.on("error", function(err) {
             callback(err, false)
         })
@@ -349,7 +331,7 @@ export default {
         callback
     ) {
         Password.findOne({ name: "sendgrid" }, function(err, data) {
-            console.log(err, data)
+            // console.log(err, data)
             if (err) {
                 callback(err)
             } else {
@@ -394,21 +376,26 @@ export default {
                                     if (err) {
                                         callback(err)
                                     } else {
+                                        // console.log(filename)
                                         var base64File = new Buffer(
                                             data
                                         ).toString("base64")
+                                        // console.log(base64File)
                                         attachment.setContent(base64File)
                                         attachment.setFilename(filename)
                                         attachment.setDisposition("attachment")
+                                        // console.log('Hello',attachment)
                                         mail.addAttachment(attachment)
                                         callback()
                                     }
                                 })
                             },
                             function(err) {
+                                // console.log(err)
                                 if (err) {
                                     callback(err)
                                 } else {
+                                    //	console.log('mail',mail.toJSON())
                                     var request = sg.emptyRequest({
                                         method: "POST",
                                         path: "/v3/mail/send",

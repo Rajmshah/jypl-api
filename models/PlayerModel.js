@@ -431,8 +431,9 @@ export default {
                 //     "file:///home/wohlig/Documents/personal/jypl/jypl-api/pdf/" +
                 //     pdfRespo.name +
                 //     ".pdf"
-                var pdfNamePath =
-                    "http://api.jypl.in/pdf/" + pdfRespo.name + ".pdf"
+                // var pdfNamePath =
+                //     "http://api.jypl.in/pdf/" + pdfRespo.name + ".pdf"
+                var pdfNamePath = pdfRespo.filename
                 var obj = {
                     fileName: pdfObj.newFilename + ".pdf",
                     filePath: pdfNamePath
