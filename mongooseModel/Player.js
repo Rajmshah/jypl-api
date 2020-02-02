@@ -125,6 +125,15 @@ var schema = new Schema(
         },
         specialRegistration: {
             type: Boolean
+        },
+        battingRate: {
+            type: Number
+        },
+        bowlingRate: {
+            type: Number
+        },
+        attendance: {
+            type: Boolean
         }
     },
     {

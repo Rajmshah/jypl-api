@@ -332,6 +332,24 @@ export default {
                         } else {
                             obj["Transaction Id"] = ""
                         }
+
+                        if (player.battingRate) {
+                            obj["Batting Rate"] = player.battingRate
+                        } else {
+                            obj["Batting Rate"] = ""
+                        }
+
+                        if (player.bowlingRate) {
+                            obj["Bowling Rate"] = player.bowlingRate
+                        } else {
+                            obj["Bowling Rate"] = ""
+                        }
+
+                        if (player.attendance) {
+                            obj["Attendance"] = player.attendance
+                        } else {
+                            obj["Attendance"] = ""
+                        }
                         excelData.push(obj)
                         callback()
                     },
