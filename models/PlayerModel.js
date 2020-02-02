@@ -174,7 +174,9 @@ export default {
                             ).format("DD-MM-YYYY")
                             obj["Registration Time"] = moment(
                                 player.registrationDate
-                            ).format("HH:mm A")
+                            )
+                                .add({ hours: 5, minutes: 30 })
+                                .format("HH:mm A")
                         } else {
                             obj["Registration Date"] = ""
                             obj["Registration Time"] = ""
