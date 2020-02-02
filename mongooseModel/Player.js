@@ -126,14 +126,23 @@ var schema = new Schema(
         specialRegistration: {
             type: Boolean
         },
+        attendance: {
+            type: Boolean
+        },
         battingRate: {
             type: Number
         },
         bowlingRate: {
             type: Number
         },
-        attendance: {
-            type: Boolean
+        fieldingRate: {
+            type: Number
+        },
+        fitnessTime: {
+            type: String
+        },
+        remark: {
+            type: String
         }
     },
     {

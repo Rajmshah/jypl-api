@@ -333,6 +333,12 @@ export default {
                             obj["Transaction Id"] = ""
                         }
 
+                        if (player.attendance) {
+                            obj["Attendance"] = player.attendance
+                        } else {
+                            obj["Attendance"] = ""
+                        }
+
                         if (player.battingRate) {
                             obj["Batting Rate"] = player.battingRate
                         } else {
@@ -345,11 +351,24 @@ export default {
                             obj["Bowling Rate"] = ""
                         }
 
-                        if (player.attendance) {
-                            obj["Attendance"] = player.attendance
+                        if (player.fieldingRate) {
+                            obj["Fielding Rate"] = player.fieldingRate
                         } else {
-                            obj["Attendance"] = ""
+                            obj["Fielding Rate"] = ""
                         }
+
+                        if (player.fitnessTime) {
+                            obj["Fitness Time"] = player.fitnessTime
+                        } else {
+                            obj["Fitness Time"] = ""
+                        }
+
+                        if (player.remark) {
+                            obj["Remark"] = player.remark
+                        } else {
+                            obj["Remark"] = ""
+                        }
+
                         excelData.push(obj)
                         callback()
                     },
