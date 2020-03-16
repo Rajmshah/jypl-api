@@ -23,6 +23,12 @@ export default {
                         }
                     },
                     {
+                        "company.name": {
+                            $regex: data.name,
+                            $options: "i"
+                        }
+                    },
+                    {
                         coupleId: {
                             $regex: data.name,
                             $options: "i"
@@ -246,10 +252,12 @@ export default {
                         }
 
                         if (couple.spouse.dob) {
-                            obj["Spouse DOB"] = moment(couple.spouse.dob).format("DD-MM-YYYY")
+                            obj["Spouse DOB"] = moment(
+                                couple.spouse.dob
+                            ).format("DD-MM-YYYY")
                             // .add(1, "days")
                         } else {
-                            obj["Spouse DOB"]  = ""
+                            obj["Spouse DOB"] = ""
                         }
 
                         if (couple.company.name) {
